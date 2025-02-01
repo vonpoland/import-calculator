@@ -35,7 +35,8 @@ jobs:
       - name: Bump version and publish
         run: |
           npm version patch -m "Release version %s"
-          git push --follow-tags
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main --follow-tags
+
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
