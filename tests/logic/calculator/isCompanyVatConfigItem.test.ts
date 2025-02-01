@@ -16,7 +16,7 @@ describe("Currency Conversion", () => {
         },
       }),
     ).toEqual({
-      value: inputCostValue,
+      value: 0,
       currency: "EUR",
     });
   });

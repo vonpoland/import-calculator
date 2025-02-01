@@ -5,27 +5,22 @@ export type Cost = {
   currency: Currency;
 };
 
-export type ConfigCostValue = {
+type ConfigCostValue = {
   cost: Cost;
 };
 
-export type ConfigBooleanValue = {
-  value: boolean;
+export type ConfigItemValues<T> = {
+  value: T;
 } & ConfigCostValue;
 
-type ConfigSingleSelectValue = {
-  value: string;
-} & ConfigCostValue;
+export type ConfigItemKeys =
+  | "vat"
+  | "provision"
+  | "transport"
+  | "outside-excise";
 
-type Rule<T extends ConfigItemValues> = (input: T) => Cost;
-
-type ConfigItemValues =
-  | ConfigCostValue
-  | ConfigBooleanValue
-  | ConfigSingleSelectValue;
-
-export interface ConfigItem<T extends ConfigItemValues> {
-  id: string;
+export interface ConfigItem<T = undefined> {
+  key: ConfigItemKeys;
   label: string;
-  result: Rule<T>;
+  result: (input: ConfigItemValues<T>) => Cost;
 }
