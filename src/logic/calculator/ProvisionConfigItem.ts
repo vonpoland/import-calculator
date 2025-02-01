@@ -1,11 +1,15 @@
-import { ConfigCostValue, ConfigItem } from "../../models/calculator/Config.ts";
+import {
+  ConfigItem,
+  ConfigItemKeys,
+  ConfigItemValues,
+} from "../../models/calculator/Config.ts";
 import { Currency, CurrencyRates } from "../../models/currency/Currency.ts";
 import { convertCurrency } from "../currency/convert.ts";
 
-export class ProvisionConfigItem implements ConfigItem<ConfigCostValue> {
+export class ProvisionConfigItem implements ConfigItem {
   constructor(private readonly currencyRates: CurrencyRates) {}
 
-  id = "provision";
+  key: ConfigItemKeys = "provision";
   label = "provision";
 
   private readonly provision = {
@@ -13,7 +17,7 @@ export class ProvisionConfigItem implements ConfigItem<ConfigCostValue> {
     value: 1000,
     provisionPercentage: 0.1,
   };
-  result(input: ConfigCostValue) {
+  result(input: ConfigItemValues<undefined>) {
     const provisionAsInputCurrency = convertCurrency(
       this.provision.value,
       this.provision.currency,

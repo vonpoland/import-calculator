@@ -1,4 +1,4 @@
-import { Currency, CurrencyRates } from "@models/currency/Currency.ts";
+import { Currency, CurrencyRates } from "../../models/currency/Currency.ts";
 
 export const convertCurrency = (
   value: number,
