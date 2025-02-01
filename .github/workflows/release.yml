@@ -27,6 +27,11 @@ jobs:
       - name: Run build
         run: npm run build
 
+      - name: Set up Git user
+        run: |
+          git config --global user.email "${GITLAB_USER_EMAIL}"
+          git config --global user.name "${GITLAB_USER_NAME}"
+
       - name: Bump version and publish
         run: |
           npm version patch -m "Release version %s"
