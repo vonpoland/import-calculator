@@ -25,7 +25,7 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Check Prettier formatting
         run: npm run prettier
@@ -50,7 +50,7 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build with tsup
         run: npm run build
@@ -75,7 +75,7 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run Tests with Vitest
         run: npm run test
