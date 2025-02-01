@@ -2,10 +2,15 @@
   "name": "import-calculator",
   "private": true,
   "version": "0.0.1",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsup",
+    "build": "tsup --format cjs,esm",
     "lint": "eslint .",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
