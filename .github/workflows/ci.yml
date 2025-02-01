@@ -18,13 +18,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
+      - name: Cache dependencies
+        uses: actions/cache@v4
         with:
-          path: node_modules
+          path: ~/.npm
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
 
       - name: Install dependencies
         run: npm install
@@ -45,13 +43,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
+      - name: Cache dependencies
+        uses: actions/cache@v4
         with:
-          path: node_modules
+          path: ~/.npm
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
 
       - name: Install dependencies
         run: npm install
@@ -72,13 +68,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
+      - name: Cache dependencies
+        uses: actions/cache@v4
         with:
-          path: node_modules
+          path: ~/.npm
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
 
       - name: Install dependencies
         run: npm install
