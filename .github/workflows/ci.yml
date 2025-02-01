@@ -9,7 +9,7 @@ on:
       - "*"
 
 jobs:
-  lint:
+  prettier:
     name: Run Lint
     runs-on: ubuntu-latest
     steps:
