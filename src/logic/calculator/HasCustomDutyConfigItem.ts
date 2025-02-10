@@ -4,9 +4,10 @@ import {
   ConfigItemValues,
 } from "../../models/calculator/Config.ts";
 
-export class HasOutsideExciseConfigItem implements ConfigItem<boolean> {
-  key: ConfigItemKeys = "outside-excise";
-  label = "outsideExcise";
+export class HasCustomDutyConfigItem implements ConfigItem<boolean> {
+  key: ConfigItemKeys = "customs-duty"; // cło
+  label = "customsDuty";
+  dependencies: Array<ConfigItemKeys> = ["input"];
 
   private readonly exciseRate = 0.1;
   result(input: ConfigItemValues<boolean>) {

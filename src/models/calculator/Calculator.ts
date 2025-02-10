@@ -1,6 +1,6 @@
 import { ConfigItemKeys, Cost } from "./Config.ts";
 
-export type CalculatorCostLines = ConfigItemKeys | "input";
+export type CalculatorCostLines = ConfigItemKeys;
 
 export interface ICalculator<T> {
   getFinalCost(
