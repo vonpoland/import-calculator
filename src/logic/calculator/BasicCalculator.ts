@@ -2,23 +2,65 @@ import {
   CalculatorCostLines,
   ICalculator,
 } from "../../models/calculator/Calculator.ts";
-import { ConfigItem, Cost } from "../../models/calculator/Config.ts";
-import { HasOutsideExciseConfigItem } from "./HasOutsideExciseConfigItem.ts";
-import { IsCompanyVatConfigItem } from "./IsCompanyVatConfigItem.ts";
-import { ProvisionConfigItem } from "./ProvisionConfigItem.ts";
+import {
+  ConfigItem,
+  Cost,
+  ExtraCostsData,
+  VehicleData,
+  VehicleType,
+} from "../../models/calculator/Config.ts";
+import { convertCurrency } from "../currency/convert.ts";
+import { CurrencyRates } from "../../models/currency/Currency.ts";
 
-type BasicCalculatorType = { isCompany: boolean; isOutsideEu: boolean };
+type BasicCalculatorType = {
+  isCompany: boolean;
+  isOutsideEu: boolean;
+  vehicleType: VehicleType;
+  engineOver20CCM: boolean;
+  extraCosts: Array<ExtraCostsData>;
+};
 
 export class BasicCalculator implements ICalculator<BasicCalculatorType> {
-  config: Array<ConfigItem<boolean> | ConfigItem> = [
-    new HasOutsideExciseConfigItem(),
-    new IsCompanyVatConfigItem(),
-    new ProvisionConfigItem({
-      EUR: 1,
-      CHF: 0.95,
-      PLN: 4.5,
-    }),
-  ];
+  private constructor(
+    private readonly config: Array<ConfigItem<boolean | ConfigItem>>,
+    private readonly currencyRates: CurrencyRates,
+  ) {}
+
+  static create(config: Array<ConfigItem<boolean> | ConfigItem>) {
+    return new this(config);
+  }
+
+  protected getSumOfDependencies(
+    inputCostCurrency: Cost["currency"],
+    dependencies: ConfigItem["dependencies"],
+    costLines: Array<{ key: CalculatorCostLines; cost: Cost }>,
+  ) {
+    return dependencies.reduce(
+      (cost, configItemKey) => {
+        const dependency = costLines.find((f) => f.key === configItemKey);
+
+        if (!dependency) {
+          throw new Error(
+            `Dependency not found bad config ${dependency} ${JSON.stringify(costLines)}`,
+          );
+        }
+
+        const sameValueCost = convertCurrency(
+          dependency.cost.value,
+          dependency.cost.currency,
+          inputCostCurrency,
+          this.currencyRates,
+        );
+
+        return {
+          ...cost,
+          value: sameValueCost + cost.value,
+        };
+      },
+      { currency: inputCostCurrency, value: 0 },
+    );
+  }
+
   getFinalCost(
     cost: Cost,
     values: BasicCalculatorType,
@@ -35,59 +77,65 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
 
     this.config.forEach((config) => {
       let result: Cost;
+      const dependenciesSum = this.getSumOfDependencies(
+        cost.currency,
+        config.dependencies,
+        costLines,
+      );
+
       switch (config.key) {
-        case "vat":
-          const exciseCost: Cost = {
-            value: 0,
-            currency: cost.currency,
-          };
-
-          const exciseConfig = this.config.find(
-            (c) => c.key === "outside-excise",
-          ) as ConfigItem<boolean>;
-
-          if (exciseConfig) {
-            exciseCost.value = exciseConfig.result({
-              cost,
-              value: values.isOutsideEu,
-            }).value;
-          }
-
+        case "vat": {
           result = (config as ConfigItem<boolean>).result({
-            cost: {
-              ...cost,
-              value: cost.value + exciseCost.value,
-            },
+            cost: dependenciesSum,
             value: values.isCompany,
           });
 
-          costLines.push({
-            cost: result,
-            key: "vat",
-          });
           break;
-        case "outside-excise":
+        }
+        case "excise-duty": {
+          result = (config as ConfigItem<VehicleData>).result({
+            cost: dependenciesSum,
+            value: {
+              engineOver20CCM: values.engineOver20CCM,
+              type: values.vehicleType,
+            },
+          });
+
+          break;
+        }
+        case "customs-duty":
           result = (config as ConfigItem<boolean>).result({
-            cost,
+            cost: dependenciesSum,
             value: values.isOutsideEu,
           });
 
-          costLines.push({
-            cost: result,
-            key: "outside-excise",
+          break;
+        case "extra-costs": {
+          const isChecked = values.extraCosts.find(
+            (f) => f.label === config.label,
+          )?.checked;
+
+          result = (config as ConfigItem<boolean>).result({
+            cost,
+            value: isChecked,
           });
           break;
+        }
+        case "transport":
         case "provision":
           result = (config as ConfigItem).result({
             cost,
             value: undefined,
           });
-
-          costLines.push({
-            cost: result,
-            key: "provision",
-          });
           break;
+        default:
+          console.warn(`Config not handled ${config.key}`);
+      }
+      if (result) {
+        costLines.push({
+          cost: result,
+          key: config.key,
+        });
       }
     });
 

@@ -7,14 +7,14 @@ import {
 import { CurrencyRates } from "../../models/currency/Currency.ts";
 import { convertCurrency } from "../currency/convert.ts";
 
-export class ProvisionConfigItem implements ConfigItem {
+export class TransportConfigItem implements ConfigItem {
   constructor(
     private readonly currencyRates: CurrencyRates,
-    private readonly provision: Cost & { provisionPercentage: number },
+    private readonly provision: Cost,
   ) {}
 
-  key: ConfigItemKeys = "provision";
-  label = "provision";
+  key: ConfigItemKeys = "transport";
+  label = "transport";
 
   dependencies: Array<ConfigItemKeys> = ["input"];
 
@@ -26,13 +26,8 @@ export class ProvisionConfigItem implements ConfigItem {
       this.currencyRates,
     );
 
-    const value = Math.min(
-      provisionAsInputCurrency,
-      input.cost.value * this.provision.provisionPercentage,
-    );
-
     return {
-      value,
+      value: provisionAsInputCurrency,
       currency: input.cost.currency,
     };
   }
