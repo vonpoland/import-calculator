@@ -1,10 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { BasicCalculator } from "../../../src/logic/calculator/BasicCalculator";
 import { HasCustomDutyConfigItem } from "../../../src/logic/calculator/HasCustomDutyConfigItem";
-import {
-  IsCompanyVatConfigItem,
-  VAT_RATES,
-} from "../../../src/logic/calculator/IsCompanyVatConfigItem";
+import { IsCompanyVatConfigItem } from "../../../src/logic/calculator/IsCompanyVatConfigItem";
 import { ProvisionConfigItem } from "../../../src/logic/calculator/ProvisionConfigItem";
 import {
   EXCISE_RATES,
@@ -15,6 +12,76 @@ import { ExtraCostConfigItem } from "../../../src/logic/calculator/ExtraCostsCon
 
 describe("Calculator", () => {
   let calculator: BasicCalculator;
+
+  describe("VAT tests", () => {
+    beforeEach(() => {
+      calculator = BasicCalculator.create(
+        [new HasCustomDutyConfigItem(), new IsCompanyVatConfigItem()],
+        {
+          EUR: 1,
+          CHF: 0.94,
+          PLN: 4.5,
+        },
+      );
+    });
+
+    it("inside EU should get no extra vat for company or no company", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 1000,
+          currency: "CHF",
+        },
+        {
+          isCompany: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isOutsideEu: false,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("CHF");
+      expect(response.finalCost.value).to.eq(1000);
+    });
+
+    it("inside EU should get no extra vat for company or no company", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 1000,
+          currency: "CHF",
+        },
+        {
+          isCompany: true,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isOutsideEu: true,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("CHF");
+      expect(response.finalCost.value).to.eq(1100);
+    });
+
+    it("inside EU should get no extra vat for company or no company", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 1000,
+          currency: "CHF",
+        },
+        {
+          isCompany: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isOutsideEu: true,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("CHF");
+      expect(response.finalCost.value).to.eq(1000 * 1.1 * 1.19);
+    });
+  });
 
   describe("Extra costs tests", () => {
     beforeEach(() => {
@@ -240,9 +307,9 @@ describe("Calculator", () => {
         },
       );
 
-      expect(result.finalCost.value).to.eq(10000 * 1.19 + 1000);
+      expect(result.finalCost.value).to.eq(10000 + 1000);
       expect(result.costLines.reduce((a, b) => a + b.cost.value, 0)).to.eq(
-        10000 * 1.19 + 1000,
+        10000 + 1000,
       );
     });
 
@@ -291,16 +358,10 @@ describe("Calculator", () => {
       );
 
       expect(result.finalCost.value).to.eq(
-        10000 *
-          (1 + VAT_RATES.VAT_RATE_DE) *
-          (1 + EXCISE_RATES.VEHICLE_STANDARD) +
-          1000,
+        10000 * (1 + EXCISE_RATES.VEHICLE_STANDARD) + 1000,
       );
       expect(result.costLines.reduce((a, b) => a + b.cost.value, 0)).to.eq(
-        10000 *
-          (1 + VAT_RATES.VAT_RATE_DE) *
-          (1 + EXCISE_RATES.VEHICLE_STANDARD) +
-          1000,
+        10000 * (1 + EXCISE_RATES.VEHICLE_STANDARD) + 1000,
       );
     });
 
@@ -324,16 +385,10 @@ describe("Calculator", () => {
       );
 
       expect(result.finalCost.value).to.eq(
-        10000 *
-          (1 + VAT_RATES.VAT_RATE_DE) *
-          (1 + EXCISE_RATES.VEHICLE_OVER_2_ENGINE) +
-          1000,
+        10000 * (1 + EXCISE_RATES.VEHICLE_OVER_2_ENGINE) + 1000,
       );
       expect(result.costLines.reduce((a, b) => a + b.cost.value, 0)).to.eq(
-        10000 *
-          (1 + VAT_RATES.VAT_RATE_DE) *
-          (1 + EXCISE_RATES.VEHICLE_OVER_2_ENGINE) +
-          1000,
+        10000 * (1 + EXCISE_RATES.VEHICLE_OVER_2_ENGINE) + 1000,
       );
     });
   });

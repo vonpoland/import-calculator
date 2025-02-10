@@ -93,7 +93,7 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
         case "vat": {
           result = (config as ConfigItem<boolean>).result({
             cost: dependenciesSum,
-            value: values.isCompany,
+            value: values.isOutsideEu ? values.isCompany : true, // in ue you don't pay extra vat
           });
 
           break;
