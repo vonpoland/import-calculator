@@ -18,20 +18,27 @@ describe("Calculator", () => {
 
   describe("Extra costs tests", () => {
     beforeEach(() => {
-      calculator = BasicCalculator.create([
-        new ExtraCostConfigItem(
-          {
-            EUR: 1,
-            CHF: 0.94,
-            PLN: 4.5,
-          },
-          {
-            currency: "EUR",
-            value: 500,
-          },
-          "translations",
-        ),
-      ]);
+      calculator = BasicCalculator.create(
+        [
+          new ExtraCostConfigItem(
+            {
+              EUR: 1,
+              CHF: 0.94,
+              PLN: 4.5,
+            },
+            {
+              currency: "EUR",
+              value: 500,
+            },
+            "translations",
+          ),
+        ],
+        {
+          EUR: 1,
+          CHF: 0.94,
+          PLN: 4.5,
+        },
+      );
     });
 
     it("should get correct final cost with extra charge", () => {
@@ -61,19 +68,26 @@ describe("Calculator", () => {
 
   describe("Transport tests", () => {
     beforeEach(() => {
-      calculator = BasicCalculator.create([
-        new TransportConfigItem(
-          {
-            EUR: 1,
-            CHF: 0.95,
-            PLN: 4.5,
-          },
-          {
-            currency: "EUR",
-            value: 500,
-          },
-        ),
-      ]);
+      calculator = BasicCalculator.create(
+        [
+          new TransportConfigItem(
+            {
+              EUR: 1,
+              CHF: 0.95,
+              PLN: 4.5,
+            },
+            {
+              currency: "EUR",
+              value: 500,
+            },
+          ),
+        ],
+        {
+          EUR: 1,
+          CHF: 0.94,
+          PLN: 4.5,
+        },
+      );
     });
 
     it("should get correct transport cost", () => {
@@ -117,20 +131,27 @@ describe("Calculator", () => {
 
   describe("Provision tests", () => {
     beforeEach(() => {
-      calculator = BasicCalculator.create([
-        new ProvisionConfigItem(
-          {
-            EUR: 1,
-            CHF: 0.95,
-            PLN: 4.5,
-          },
-          {
-            currency: "EUR",
-            value: 1000,
-            provisionPercentage: 0.1,
-          },
-        ),
-      ]);
+      calculator = BasicCalculator.create(
+        [
+          new ProvisionConfigItem(
+            {
+              EUR: 1,
+              CHF: 0.95,
+              PLN: 4.5,
+            },
+            {
+              currency: "EUR",
+              value: 1000,
+              provisionPercentage: 0.1,
+            },
+          ),
+        ],
+        {
+          EUR: 1,
+          CHF: 0.94,
+          PLN: 4.5,
+        },
+      );
     });
 
     it("should get correct provision", () => {
@@ -174,23 +195,30 @@ describe("Calculator", () => {
 
   describe("Calculator with provision and vat", () => {
     beforeEach(() => {
-      calculator = BasicCalculator.create([
-        new HasCustomDutyConfigItem(),
-        new IsCompanyVatConfigItem(),
-        new HasExciseDutyConfigItem(),
-        new ProvisionConfigItem(
-          {
-            EUR: 1,
-            CHF: 0.95,
-            PLN: 4.5,
-          },
-          {
-            currency: "EUR",
-            value: 1000,
-            provisionPercentage: 0.1,
-          },
-        ),
-      ]);
+      calculator = BasicCalculator.create(
+        [
+          new HasCustomDutyConfigItem(),
+          new IsCompanyVatConfigItem(),
+          new HasExciseDutyConfigItem(),
+          new ProvisionConfigItem(
+            {
+              EUR: 1,
+              CHF: 0.95,
+              PLN: 4.5,
+            },
+            {
+              currency: "EUR",
+              value: 1000,
+              provisionPercentage: 0.1,
+            },
+          ),
+        ],
+        {
+          EUR: 1,
+          CHF: 0.94,
+          PLN: 4.5,
+        },
+      );
     });
 
     it("should get correct value for non-company in europe", () => {

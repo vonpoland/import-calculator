@@ -22,12 +22,17 @@ type BasicCalculatorType = {
 
 export class BasicCalculator implements ICalculator<BasicCalculatorType> {
   private constructor(
-    private readonly config: Array<ConfigItem<boolean | ConfigItem>>,
+    private readonly config: Array<
+      ConfigItem<boolean> | ConfigItem | ConfigItem<VehicleData>
+    >,
     private readonly currencyRates: CurrencyRates,
   ) {}
 
-  static create(config: Array<ConfigItem<boolean> | ConfigItem>) {
-    return new this(config);
+  static create(
+    config: Array<ConfigItem<boolean> | ConfigItem | ConfigItem<VehicleData>>,
+    currencyRates: CurrencyRates,
+  ) {
+    return new this(config, currencyRates);
   }
 
   protected getSumOfDependencies(
@@ -76,7 +81,8 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
     ];
 
     this.config.forEach((config) => {
-      let result: Cost;
+      let result: Cost | null = null;
+
       const dependenciesSum = this.getSumOfDependencies(
         cost.currency,
         config.dependencies,
@@ -117,7 +123,7 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
 
           result = (config as ConfigItem<boolean>).result({
             cost,
-            value: isChecked,
+            value: Boolean(isChecked),
           });
           break;
         }
