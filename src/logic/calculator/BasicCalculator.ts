@@ -4,9 +4,11 @@ import {
 } from "../../models/calculator/Calculator.ts";
 import {
   ConfigItem,
+  ConfigItems,
   Cost,
   ExtraCostsData,
   VehicleData,
+  VehicleDataOutsideEu,
   VehicleType,
 } from "../../models/calculator/Config.ts";
 import { convertCurrency } from "../currency/convert.ts";
@@ -22,16 +24,11 @@ type BasicCalculatorType = {
 
 export class BasicCalculator implements ICalculator<BasicCalculatorType> {
   private constructor(
-    private readonly config: Array<
-      ConfigItem<boolean> | ConfigItem | ConfigItem<VehicleData>
-    >,
+    private readonly config: Array<ConfigItems>,
     private readonly currencyRates: CurrencyRates,
   ) {}
 
-  static create(
-    config: Array<ConfigItem<boolean> | ConfigItem | ConfigItem<VehicleData>>,
-    currencyRates: CurrencyRates,
-  ) {
+  static create(config: Array<ConfigItems>, currencyRates: CurrencyRates) {
     return new this(config, currencyRates);
   }
 
@@ -110,9 +107,12 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
           break;
         }
         case "customs-duty":
-          result = (config as ConfigItem<boolean>).result({
+          result = (config as ConfigItem<VehicleDataOutsideEu>).result({
             cost: dependenciesSum,
-            value: values.isOutsideEu,
+            value: {
+              type: values.vehicleType,
+              isOutsideEu: values.isOutsideEu,
+            },
           });
 
           break;

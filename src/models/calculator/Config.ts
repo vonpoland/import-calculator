@@ -17,6 +17,11 @@ export type VehicleData = {
   engineOver20CCM: boolean;
 };
 
+export type VehicleDataOutsideEu = {
+  type: VehicleType;
+  isOutsideEu: boolean;
+};
+
 export type ExtraCostsData = {
   label: string;
   checked: boolean;
@@ -45,3 +50,9 @@ export interface ConfigItem<T = undefined> {
   label: string;
   result: (input: ConfigItemValues<T>) => Cost;
 }
+
+export type ConfigItems =
+  | ConfigItem<boolean>
+  | ConfigItem
+  | ConfigItem<VehicleData>
+  | ConfigItem<VehicleDataOutsideEu>;
