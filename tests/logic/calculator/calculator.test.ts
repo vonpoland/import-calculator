@@ -144,8 +144,30 @@ describe("Calculator", () => {
               PLN: 4.5,
             },
             {
-              currency: "EUR",
-              value: 500,
+              CAR: {
+                currency: "EUR",
+                value: 500,
+              },
+              ELECTRIC_CAR: {
+                currency: "EUR",
+                value: 500,
+              },
+              MOTORCYCLE: {
+                currency: "EUR",
+                value: 500,
+              },
+              TRUCK: {
+                currency: "EUR",
+                value: 1500,
+              },
+              HYBRID_CAR: {
+                currency: "EUR",
+                value: 500,
+              },
+              HYBRID_PLUG_IN: {
+                currency: "EUR",
+                value: 500,
+              },
             },
           ),
         ],
@@ -155,6 +177,25 @@ describe("Calculator", () => {
           PLN: 4.5,
         },
       );
+    });
+
+    it("should get correct transport cost for truck", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 1000,
+          currency: "EUR",
+        },
+        {
+          isCompany: false,
+          vehicleType: "TRUCK",
+          engineOver20CCM: true,
+          isOutsideEu: false,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("EUR");
+      expect(response.finalCost.value).to.eq(2500);
     });
 
     it("should get correct transport cost", () => {

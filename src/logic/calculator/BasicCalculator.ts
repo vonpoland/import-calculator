@@ -95,6 +95,7 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
 
           break;
         }
+        case "transport":
         case "excise-duty": {
           result = (config as ConfigItem<VehicleData>).result({
             cost: dependenciesSum,
@@ -127,7 +128,6 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
           });
           break;
         }
-        case "transport":
         case "provision":
           result = (config as ConfigItem).result({
             cost,
