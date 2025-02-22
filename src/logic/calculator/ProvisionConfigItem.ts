@@ -8,7 +8,7 @@ import { CurrencyRates } from "../../models/currency/Currency.ts";
 import { convertCurrency } from "../currency/convert.ts";
 
 type ProvisionType = {
-  threshold: number;
+  threshold: Cost;
   percentageProvision: number;
   staticMinProvision?: Cost;
   staticMaxProvision?: Cost;
@@ -27,7 +27,14 @@ export class ProvisionConfigItem implements ConfigItem {
 
   result(input: ConfigItemValues<undefined>) {
     const provisionConfig = this.provisions.find(
-      (config) => input.cost.value <= config.threshold,
+      (config) =>
+        input.cost.value <=
+        convertCurrency(
+          config.threshold.value,
+          config.threshold.currency,
+          input.cost.currency,
+          this.currencyRates,
+        ),
     );
 
     if (!provisionConfig) {
@@ -54,20 +61,14 @@ export class ProvisionConfigItem implements ConfigItem {
         this.currencyRates,
       );
 
-    if (
-      minProvisionInInputValue &&
-      input.cost.value < minProvisionInInputValue
-    ) {
+    if (minProvisionInInputValue && provisionValue < minProvisionInInputValue) {
       return {
         value: minProvisionInInputValue,
         currency: input.cost.currency,
       };
     }
 
-    if (
-      maxProvisionInInputValue &&
-      input.cost.value > maxProvisionInInputValue
-    ) {
+    if (maxProvisionInInputValue && provisionValue > maxProvisionInInputValue) {
       return {
         value: maxProvisionInInputValue,
         currency: input.cost.currency,

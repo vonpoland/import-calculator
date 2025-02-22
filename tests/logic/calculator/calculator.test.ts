@@ -249,7 +249,10 @@ describe("Calculator", () => {
             },
             [
               {
-                threshold: 30000,
+                threshold: {
+                  value: 30000,
+                  currency: "EUR",
+                },
                 percentageProvision: 0.1,
                 staticMaxProvision: {
                   currency: "EUR",
@@ -261,7 +264,10 @@ describe("Calculator", () => {
                 },
               },
               {
-                threshold: Infinity,
+                threshold: {
+                  value: Infinity,
+                  currency: "EUR",
+                },
                 percentageProvision: 0.05,
               },
             ],
@@ -275,7 +281,7 @@ describe("Calculator", () => {
       );
     });
 
-    it("should get correct provision", () => {
+    it("should get correct provision other currency", () => {
       const response = calculator.getFinalCost(
         {
           value: 35000,
@@ -290,8 +296,8 @@ describe("Calculator", () => {
         },
       );
 
-      expect(response.finalCost.currency).to.eq("EUR");
-      expect(response.finalCost.value).to.eq(1100);
+      expect(response.finalCost.currency).to.eq("PLN");
+      expect(response.finalCost.value).to.eq(35000 + 3500);
     });
 
     it("should get correct provision", () => {
@@ -310,7 +316,7 @@ describe("Calculator", () => {
       );
 
       expect(response.finalCost.currency).to.eq("EUR");
-      expect(response.finalCost.value).to.eq(1100);
+      expect(response.finalCost.value).to.eq(1500);
     });
 
     it("should get correct provision for high value", () => {
@@ -348,7 +354,7 @@ describe("Calculator", () => {
       );
 
       expect(response.finalCost.currency).to.eq("EUR");
-      expect(response.finalCost.value).to.eq(30001 + 30001 * 0.05);
+      expect(response.finalCost.value).to.eq(Math.round(30001 + 30001 * 0.05));
     });
 
     it("should get correct min provision", () => {
@@ -405,11 +411,11 @@ describe("Calculator", () => {
             },
             [
               {
-                threshold: Infinity,
+                threshold: {
+                  value: Infinity,
+                  currency: "EUR",
+                },
                 percentageProvision: 0.1,
-                // currency: "EUR",
-                // value: 1000,
-                // provisionPercentage: 0.1,
               },
             ],
           ),
