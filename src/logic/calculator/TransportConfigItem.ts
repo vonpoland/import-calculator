@@ -3,14 +3,16 @@ import {
   ConfigItemKeys,
   ConfigItemValues,
   Cost,
+  VehicleData,
+  VehicleType,
 } from "../../models/calculator/Config.ts";
 import { CurrencyRates } from "../../models/currency/Currency.ts";
 import { convertCurrency } from "../currency/convert.ts";
 
-export class TransportConfigItem implements ConfigItem {
+export class TransportConfigItem implements ConfigItem<VehicleData> {
   constructor(
     private readonly currencyRates: CurrencyRates,
-    private readonly provision: Cost,
+    private readonly provision: Record<VehicleType, Cost>,
   ) {}
 
   key: ConfigItemKeys = "transport";
@@ -18,10 +20,15 @@ export class TransportConfigItem implements ConfigItem {
 
   dependencies: Array<ConfigItemKeys> = ["input"];
 
-  result(input: ConfigItemValues<undefined>) {
+  result(input: ConfigItemValues<VehicleData>) {
+    const {
+      value: { type },
+    } = input;
+    const provisionCost = this.provision[type];
+
     const provisionAsInputCurrency = convertCurrency(
-      this.provision.value,
-      this.provision.currency,
+      provisionCost.value,
+      provisionCost.currency,
       input.cost.currency,
       this.currencyRates,
     );

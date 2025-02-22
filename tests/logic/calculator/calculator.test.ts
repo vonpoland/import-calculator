@@ -144,8 +144,30 @@ describe("Calculator", () => {
               PLN: 4.5,
             },
             {
-              currency: "EUR",
-              value: 500,
+              CAR: {
+                currency: "EUR",
+                value: 500,
+              },
+              ELECTRIC_CAR: {
+                currency: "EUR",
+                value: 500,
+              },
+              MOTORCYCLE: {
+                currency: "EUR",
+                value: 500,
+              },
+              TRUCK: {
+                currency: "EUR",
+                value: 1500,
+              },
+              HYBRID_CAR: {
+                currency: "EUR",
+                value: 500,
+              },
+              HYBRID_PLUG_IN: {
+                currency: "EUR",
+                value: 500,
+              },
             },
           ),
         ],
@@ -155,6 +177,25 @@ describe("Calculator", () => {
           PLN: 4.5,
         },
       );
+    });
+
+    it("should get correct transport cost for truck", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 1000,
+          currency: "EUR",
+        },
+        {
+          isCompany: false,
+          vehicleType: "TRUCK",
+          engineOver20CCM: true,
+          isOutsideEu: false,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("EUR");
+      expect(response.finalCost.value).to.eq(2500);
     });
 
     it("should get correct transport cost", () => {
@@ -176,7 +217,7 @@ describe("Calculator", () => {
       expect(response.finalCost.value).to.eq(1500);
     });
 
-    it("should get correct provision", () => {
+    it("should get transport provision", () => {
       const response = calculator.getFinalCost(
         {
           value: 15000,
@@ -206,11 +247,30 @@ describe("Calculator", () => {
               CHF: 0.95,
               PLN: 4.5,
             },
-            {
-              currency: "EUR",
-              value: 1000,
-              provisionPercentage: 0.1,
-            },
+            [
+              {
+                threshold: {
+                  value: 30000,
+                  currency: "EUR",
+                },
+                percentageProvision: 0.1,
+                staticMaxProvision: {
+                  currency: "EUR",
+                  value: 1000,
+                },
+                staticMinProvision: {
+                  currency: "EUR",
+                  value: 500,
+                },
+              },
+              {
+                threshold: {
+                  value: Infinity,
+                  currency: "EUR",
+                },
+                percentageProvision: 0.05,
+              },
+            ],
           ),
         ],
         {
@@ -219,6 +279,25 @@ describe("Calculator", () => {
           PLN: 4.5,
         },
       );
+    });
+
+    it("should get correct provision other currency", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 35000,
+          currency: "PLN",
+        },
+        {
+          isCompany: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isOutsideEu: false,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("PLN");
+      expect(response.finalCost.value).to.eq(35000 + 3500);
     });
 
     it("should get correct provision", () => {
@@ -237,7 +316,64 @@ describe("Calculator", () => {
       );
 
       expect(response.finalCost.currency).to.eq("EUR");
-      expect(response.finalCost.value).to.eq(1100);
+      expect(response.finalCost.value).to.eq(1500);
+    });
+
+    it("should get correct provision for high value", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 30000,
+          currency: "EUR",
+        },
+        {
+          isCompany: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isOutsideEu: false,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("EUR");
+      expect(response.finalCost.value).to.eq(31000);
+    });
+
+    it("should get correct provision for high value", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 30001,
+          currency: "EUR",
+        },
+        {
+          isCompany: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isOutsideEu: false,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("EUR");
+      expect(response.finalCost.value).to.eq(Math.round(30001 + 30001 * 0.05));
+    });
+
+    it("should get correct min provision", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 100,
+          currency: "EUR",
+        },
+        {
+          isCompany: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isOutsideEu: false,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("EUR");
+      expect(response.finalCost.value).to.eq(600);
     });
 
     it("should get correct provision", () => {
@@ -273,11 +409,15 @@ describe("Calculator", () => {
               CHF: 0.95,
               PLN: 4.5,
             },
-            {
-              currency: "EUR",
-              value: 1000,
-              provisionPercentage: 0.1,
-            },
+            [
+              {
+                threshold: {
+                  value: Infinity,
+                  currency: "EUR",
+                },
+                percentageProvision: 0.1,
+              },
+            ],
           ),
         ],
         {
