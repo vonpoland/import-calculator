@@ -217,7 +217,7 @@ describe("Calculator", () => {
       expect(response.finalCost.value).to.eq(1500);
     });
 
-    it("should get correct provision", () => {
+    it("should get transport provision", () => {
       const response = calculator.getFinalCost(
         {
           value: 15000,
@@ -273,6 +273,25 @@ describe("Calculator", () => {
           PLN: 4.5,
         },
       );
+    });
+
+    it("should get correct provision", () => {
+      const response = calculator.getFinalCost(
+        {
+          value: 35000,
+          currency: "PLN",
+        },
+        {
+          isCompany: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isOutsideEu: false,
+          extraCosts: [],
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("EUR");
+      expect(response.finalCost.value).to.eq(1100);
     });
 
     it("should get correct provision", () => {

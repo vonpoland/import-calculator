@@ -75,7 +75,7 @@ export class ProvisionConfigItem implements ConfigItem {
     }
 
     return {
-      value: provisionValue,
+      value: Math.round(provisionValue),
       currency: input.cost.currency,
     };
   }
