@@ -12,7 +12,7 @@ export type CustomDutyExcise = {
 
 export enum CustomDutyExciseStandard {
   STANDARD = 0.1,
-  MOTORCYCLE = 0.06,
+  MOTORCYCLE = 0.1,
 }
 
 export class HasCustomDutyConfigItem
