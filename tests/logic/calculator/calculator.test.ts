@@ -108,7 +108,7 @@ describe("Calculator", () => {
       );
     });
 
-    it.only("should get correct final cost with extra charge", () => {
+    it("should get correct final cost with extra charge", () => {
       const response = calculator.getFinalCost(
         {
           value: 1000,
