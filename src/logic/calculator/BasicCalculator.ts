@@ -70,7 +70,11 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
     finalCost: Cost;
     costLines: Array<{ key: CalculatorCostLines; cost: Cost }>;
   } {
-    const costLines: Array<{ key: CalculatorCostLines; cost: Cost }> = [
+    const costLines: Array<{
+      key: CalculatorCostLines;
+      cost: Cost;
+      label?: string;
+    }> = [
       {
         key: "input",
         cost,
@@ -78,7 +82,7 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
     ];
 
     this.config.forEach((config) => {
-      let result: Cost | null = null;
+      let result: (Cost & { label?: string }) | null = null;
 
       const dependenciesSum = this.getSumOfDependencies(
         cost.currency,
@@ -139,8 +143,12 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
       }
       if (result) {
         costLines.push({
-          cost: result,
+          cost: {
+            value: result.value,
+            currency: result.currency,
+          },
           key: config.key,
+          label: result.label,
         });
       }
     });
