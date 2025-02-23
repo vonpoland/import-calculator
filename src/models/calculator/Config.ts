@@ -48,7 +48,7 @@ export interface ConfigItem<T = undefined> {
   key: ConfigItemKeys;
   dependencies: Array<ConfigItemKeys>;
   label: string;
-  result: (input: ConfigItemValues<T>) => Cost;
+  result: (input: ConfigItemValues<T>) => Cost & { label?: string };
 }
 
 export type ConfigItems =

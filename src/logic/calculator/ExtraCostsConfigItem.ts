@@ -27,6 +27,7 @@ export class ExtraCostConfigItem implements ConfigItem<boolean> {
       );
 
       return {
+        label: this.label,
         value: provisionAsInputCurrency,
         currency: input.cost.currency,
       };
@@ -35,6 +36,7 @@ export class ExtraCostConfigItem implements ConfigItem<boolean> {
     return {
       value: 0,
       currency: input.cost.currency,
+      label: this.label,
     };
   }
 }
