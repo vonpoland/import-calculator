@@ -5,6 +5,7 @@ import { ExtraCostConfigItem } from "./logic/calculator/ExtraCostsConfigItem.ts"
 import { HasCustomDutyConfigItem } from "./logic/calculator/HasCustomDutyConfigItem.ts";
 import { HasExciseDutyConfigItem } from "./logic/calculator/HasExciseDutyConfigItem.ts";
 import { TransportConfigItem } from "./logic/calculator/TransportConfigItem.ts";
+import { convertCurrency } from "./logic/currency/convert.ts";
 
 export const Calculator = {
   ProvisionConfigItem,
@@ -14,4 +15,8 @@ export const Calculator = {
   HasExciseDutyConfigItem,
   TransportConfigItem,
   BasicCalculator,
+};
+
+export const Currency = {
+  convertCurrency,
 };
