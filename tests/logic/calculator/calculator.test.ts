@@ -99,6 +99,18 @@ describe("Calculator", () => {
             },
             "translations",
           ),
+          new ExtraCostConfigItem(
+            {
+              EUR: 1,
+              CHF: 0.94,
+              PLN: 4.5,
+            },
+            {
+              currency: "EUR",
+              value: 500,
+            },
+            "dutyCostSwiss",
+          ),
         ],
         {
           EUR: 1,
@@ -123,6 +135,10 @@ describe("Calculator", () => {
             {
               checked: true,
               label: "translations",
+            },
+            {
+              checked: false,
+              label: "dutyCostSwiss",
             },
           ],
         },
