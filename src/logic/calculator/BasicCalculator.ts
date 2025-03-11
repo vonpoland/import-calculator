@@ -18,7 +18,8 @@ import { Country } from "../../models/country/Country.ts";
 
 type BasicCalculatorType = {
   isCompany: boolean;
-  isOutsideEu: boolean;
+  isManufacturedOutsideEu: boolean;
+  isImportedFromEu: boolean;
   vehicleType: VehicleType;
   engineOver20CCM: boolean;
   extraCosts: Array<ExtraCostsData>;
@@ -98,7 +99,7 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
           result = (config as ConfigItem<CompanyVatData>).result({
             cost: dependenciesSum,
             value: {
-              isCompany: values.isOutsideEu ? values.isCompany : true, // in ue you don't pay extra vat
+              isCompany: values.isImportedFromEu ? true : values.isCompany, // in ue you don't pay extra vat
               country: values.customDutyCountry,
             },
           });
@@ -122,7 +123,8 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
             cost: dependenciesSum,
             value: {
               type: values.vehicleType,
-              isOutsideEu: values.isOutsideEu,
+              isOutsideEu:
+                !values.isImportedFromEu && values.isManufacturedOutsideEu,
             },
           });
 
