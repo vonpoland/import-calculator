@@ -1,4 +1,5 @@
 import { Currency } from "../currency/Currency.ts";
+import { Country } from "../country/Country.ts";
 
 export type Cost = {
   value: number;
@@ -7,14 +8,21 @@ export type Cost = {
 export type VehicleType =
   | "CAR"
   | "MOTORCYCLE"
+  | "TRUCK_SMALL"
   | "TRUCK"
   | "ELECTRIC_CAR"
   | "HYBRID_CAR"
-  | "HYBRID_PLUG_IN";
+  | "HYBRID_PLUG_IN"
+  | "QUAD";
 
 export type VehicleData = {
   type: VehicleType;
   engineOver20CCM: boolean;
+};
+
+export type CompanyVatData = {
+  country: Country;
+  isCompany: boolean;
 };
 
 export type VehicleDataOutsideEu = {
@@ -55,4 +63,5 @@ export type ConfigItems =
   | ConfigItem<boolean>
   | ConfigItem
   | ConfigItem<VehicleData>
-  | ConfigItem<VehicleDataOutsideEu>;
+  | ConfigItem<VehicleDataOutsideEu>
+  | ConfigItem<CompanyVatData>;

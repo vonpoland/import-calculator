@@ -3,6 +3,7 @@ import {
   ICalculator,
 } from "../../models/calculator/Calculator.ts";
 import {
+  CompanyVatData,
   ConfigItem,
   ConfigItems,
   Cost,
@@ -13,6 +14,7 @@ import {
 } from "../../models/calculator/Config.ts";
 import { convertCurrency } from "../currency/convert.ts";
 import { CurrencyRates } from "../../models/currency/Currency.ts";
+import { Country } from "../../models/country/Country.ts";
 
 type BasicCalculatorType = {
   isCompany: boolean;
@@ -20,6 +22,7 @@ type BasicCalculatorType = {
   vehicleType: VehicleType;
   engineOver20CCM: boolean;
   extraCosts: Array<ExtraCostsData>;
+  customDutyCountry: Country;
 };
 
 export class BasicCalculator implements ICalculator<BasicCalculatorType> {
@@ -92,9 +95,12 @@ export class BasicCalculator implements ICalculator<BasicCalculatorType> {
 
       switch (config.key) {
         case "vat": {
-          result = (config as ConfigItem<boolean>).result({
+          result = (config as ConfigItem<CompanyVatData>).result({
             cost: dependenciesSum,
-            value: values.isOutsideEu ? values.isCompany : true, // in ue you don't pay extra vat
+            value: {
+              isCompany: values.isOutsideEu ? values.isCompany : true, // in ue you don't pay extra vat
+              country: values.customDutyCountry,
+            },
           });
 
           break;

@@ -1,24 +1,27 @@
 import {
+  CompanyVatData,
   ConfigItem,
   ConfigItemKeys,
   ConfigItemValues,
 } from "../../models/calculator/Config.ts";
+import { Country } from "../../models/country/Country.ts";
 
-export enum VAT_RATES {
-  VAT_RATE_DE = 0.19,
-  VAT_RATE_COMPANY = 0,
-}
+export const COUNTRY_VAT_RATES: Record<Country, number> = {
+  DE: 0.19,
+  NL: 0.21,
+  PL: 0.23,
+};
 
-export class IsCompanyVatConfigItem implements ConfigItem<boolean> {
+export class IsCompanyVatConfigItem implements ConfigItem<CompanyVatData> {
   key: ConfigItemKeys = "vat";
   label = "vat";
   dependencies: Array<ConfigItemKeys> = ["input", "customs-duty"];
 
-  result(input: ConfigItemValues<boolean>) {
+  result(input: ConfigItemValues<CompanyVatData>) {
     return {
-      value: input.value
-        ? VAT_RATES.VAT_RATE_COMPANY
-        : VAT_RATES.VAT_RATE_DE * input.cost.value,
+      value: input.value.isCompany
+        ? 0
+        : COUNTRY_VAT_RATES[input.value.country] * input.cost.value,
       currency: input.cost.currency,
     };
   }

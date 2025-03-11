@@ -37,6 +37,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -56,6 +57,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: true,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -75,6 +77,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: true,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -131,6 +134,7 @@ describe("Calculator", () => {
           vehicleType: "ELECTRIC_CAR",
           engineOver20CCM: true,
           isOutsideEu: false,
+          customDutyCountry: "DE",
           extraCosts: [
             {
               checked: true,
@@ -184,6 +188,14 @@ describe("Calculator", () => {
                 currency: "EUR",
                 value: 500,
               },
+              QUAD: {
+                currency: "EUR",
+                value: 500,
+              },
+              TRUCK_SMALL: {
+                currency: "EUR",
+                value: 500,
+              },
             },
           ),
         ],
@@ -207,6 +219,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -226,6 +239,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -245,6 +259,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -309,6 +324,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -328,6 +344,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -347,6 +364,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -366,6 +384,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -385,6 +404,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -404,6 +424,7 @@ describe("Calculator", () => {
           engineOver20CCM: true,
           isOutsideEu: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -460,6 +481,7 @@ describe("Calculator", () => {
           vehicleType: "ELECTRIC_CAR",
           engineOver20CCM: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -485,6 +507,7 @@ describe("Calculator", () => {
           vehicleType: "ELECTRIC_CAR",
           engineOver20CCM: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -510,6 +533,7 @@ describe("Calculator", () => {
           vehicleType: "CAR",
           engineOver20CCM: false,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
@@ -537,6 +561,7 @@ describe("Calculator", () => {
           vehicleType: "CAR",
           engineOver20CCM: true,
           extraCosts: [],
+          customDutyCountry: "DE",
         },
       );
 
