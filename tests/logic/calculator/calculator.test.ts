@@ -184,6 +184,14 @@ describe("Calculator", () => {
                 currency: "EUR",
                 value: 500,
               },
+              QUAD: {
+                currency: "EUR",
+                value: 500,
+              },
+              TRUCK_SMALL: {
+                currency: "EUR",
+                value: 500,
+              },
             },
           ),
         ],
