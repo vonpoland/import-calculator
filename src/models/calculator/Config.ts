@@ -63,4 +63,5 @@ export type ConfigItems =
   | ConfigItem<boolean>
   | ConfigItem
   | ConfigItem<VehicleData>
-  | ConfigItem<VehicleDataOutsideEu>;
+  | ConfigItem<VehicleDataOutsideEu>
+  | ConfigItem<CompanyVatData>;
