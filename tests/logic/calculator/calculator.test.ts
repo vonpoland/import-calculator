@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { BasicCalculator } from "../../../src/logic/calculator/BasicCalculator";
-import { HasCustomDutyConfigItem } from "../../../src/logic/calculator/HasCustomDutyConfigItem";
+import {
+  CustomDutyExciseStandard,
+  HasCustomDutyConfigItem,
+} from "../../../src/logic/calculator/HasCustomDutyConfigItem";
 import { IsCompanyVatConfigItem } from "../../../src/logic/calculator/IsCompanyVatConfigItem";
 import { ProvisionConfigItem } from "../../../src/logic/calculator/ProvisionConfigItem";
 import {
@@ -587,6 +590,81 @@ describe("Calculator", () => {
       );
       expect(result.costLines.reduce((a, b) => a + b.cost.value, 0)).to.eq(
         10000 * (1 + EXCISE_RATES.VEHICLE_OVER_2_ENGINE) + 1000,
+      );
+    });
+  });
+
+  describe("Calculator customs duty with custom dependencies", () => {
+    beforeEach(() => {
+      calculator = BasicCalculator.create(
+        [
+          new ProvisionConfigItem(
+            {
+              EUR: 1,
+              CHF: 0.95,
+              PLN: 4.5,
+            },
+            [
+              {
+                threshold: {
+                  value: Infinity,
+                  currency: "CHF",
+                },
+                percentageProvision: 0.1,
+                staticMinProvision: {
+                  value: 200,
+                  currency: "CHF",
+                },
+              },
+            ],
+          ),
+          new HasCustomDutyConfigItem(
+            {
+              STANDARD: CustomDutyExciseStandard.STANDARD,
+              MOTORCYCLE: CustomDutyExciseStandard.STANDARD,
+            },
+            ["input", "provision"],
+          ),
+        ],
+        {
+          EUR: 1,
+          CHF: 0.94,
+          PLN: 4.5,
+        },
+      );
+    });
+
+    it("should get correct value for non-company in europe", () => {
+      // 10000
+      // 1000 provision
+      const auctionCost = 10000;
+      const result = calculator.getFinalCost(
+        {
+          value: auctionCost,
+          currency: "CHF",
+        },
+        {
+          isCompany: false,
+          isManufacturedOutsideEu: true,
+          isImportedFromEu: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: false,
+          extraCosts: [],
+          customDutyCountry: "DE",
+        },
+      );
+      const customsDuty = result.costLines.find(
+        (f) => f.key === "customs-duty",
+      );
+      const expectedProvision = 1000;
+      const expectedCustomsDuty = (auctionCost + expectedProvision) * 0.1;
+
+      expect(customsDuty.cost.value).eq(expectedCustomsDuty);
+      expect(result.finalCost.value).to.eq(
+        auctionCost + expectedCustomsDuty + expectedProvision,
+      );
+      expect(result.costLines.reduce((a, b) => a + b.cost.value, 0)).to.eq(
+        auctionCost + expectedCustomsDuty + expectedProvision,
       );
     });
   });

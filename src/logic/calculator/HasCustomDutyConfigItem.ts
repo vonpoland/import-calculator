@@ -12,7 +12,6 @@ export type CustomDutyExcise = {
 
 export enum CustomDutyExciseStandard {
   STANDARD = 0.1,
-  MOTORCYCLE = 0.1,
 }
 
 export class HasCustomDutyConfigItem
@@ -21,13 +20,13 @@ export class HasCustomDutyConfigItem
   constructor(
     private readonly customDutyExcisePerVehicleType: CustomDutyExcise = {
       STANDARD: CustomDutyExciseStandard.STANDARD,
-      MOTORCYCLE: CustomDutyExciseStandard.MOTORCYCLE,
+      MOTORCYCLE: CustomDutyExciseStandard.STANDARD,
     },
+    public readonly dependencies: Array<ConfigItemKeys> = ["input"],
   ) {}
 
   key: ConfigItemKeys = "customs-duty"; // cło
   label = "customsDuty";
-  dependencies: Array<ConfigItemKeys> = ["input"];
 
   result(input: ConfigItemValues<VehicleDataOutsideEu>) {
     if (input.value.isOutsideEu) {
