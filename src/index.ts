@@ -9,6 +9,7 @@ import {
 import { HasExciseDutyConfigItem } from "./logic/calculator/HasExciseDutyConfigItem.ts";
 import { TransportConfigItem } from "./logic/calculator/TransportConfigItem.ts";
 import { convertCurrency } from "./logic/currency/convert.ts";
+import { PriceTabs } from "./components/charts/PriceTabs.tsx";
 
 export const Calculator = {
   ProvisionConfigItem,
@@ -23,4 +24,10 @@ export const Calculator = {
 
 export const Currency = {
   convertCurrency,
+};
+
+export const UiComponents = {
+  charts: {
+    PriceTabs,
+  },
 };

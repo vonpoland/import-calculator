@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
+.car-price-widget {
+  font-family:
+    var(
+      --font-family,
+      "Plus Jakarta Sans",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif
+    ),
+    serif;
+}
+
+:root {
+  --color-up: #2e7d32;
+  --color-down: #c62828;
+  --color-stable: #555;
+  --font-size-large: 2rem;
+  --font-size-normal: 1rem;
+}
+
+.price-summary {
+  text-align: left;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.2rem;
+  max-width: 500px;
+  background-color: #fff;
+}
+
+.price-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.price-main {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.price-value {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+}
+
+.price-date {
+  font-size: var(--font-size-normal);
+  color: #666;
+}
+
+.price-range {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.2rem;
+  font-size: var(--font-size-normal);
+  color: #333;
+}
+
+.price-trend {
+  font-size: var(--font-size-normal);
+  font-weight: 500;
+}
+
+.trend-up {
+  color: var(--color-up);
+}
+
+.trend-down {
+  color: var(--color-down);
+}
+
+.trend-stable {
+  color: var(--color-stable);
+}
