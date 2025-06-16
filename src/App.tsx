@@ -2,7 +2,41 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import { PriceTabs } from "./components/charts/PriceTabs.tsx";
+import { PriceSummaryProps } from "./components/charts/type.ts";
 
+const stats: Array<PriceSummaryProps> = [
+  {
+    country: "DE",
+    countryFlag: "🇩🇪",
+    countryFlagUrl: "DE",
+    countryLabel: "DeLabe",
+    averagePrice: 555,
+    minPrice: 1,
+    maxPrice: 10000,
+    dateFrom: new Date().toISOString(),
+    dateTo: new Date().toISOString(),
+    trend: {
+      changePercent: 2,
+      type: "up",
+    },
+  },
+  {
+    country: "PL",
+    countryFlag: "🇵🇱",
+    countryFlagUrl: "PL",
+    countryLabel: "PolskaLabel",
+    averagePrice: 555,
+    minPrice: 1,
+    maxPrice: 10000,
+    dateFrom: new Date().toISOString(),
+    dateTo: new Date().toISOString(),
+    trend: {
+      changePercent: 2,
+      type: "up",
+    },
+  },
+];
 function App() {
   const [count, setCount] = useState(0);
 
@@ -21,6 +55,7 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+        <PriceTabs pricesByCountry={stats} />
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
