@@ -2,4 +2,6 @@
 
 ## Currency converter
 
-Currencies CHF/PLN/EUR
+### Currencies
+
+CHF/PLN/EUR
