@@ -10,6 +10,7 @@ export const COUNTRY_VAT_RATES: Record<Country, number> = {
   DE: 0.19,
   NL: 0.21,
   PL: 0.23,
+  CH: 0.081
 };
 
 export class IsCompanyVatConfigItem implements ConfigItem<CompanyVatData> {

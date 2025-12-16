@@ -535,6 +535,31 @@ describe("Calculator", () => {
       );
     });
 
+
+    it("should get correct value for non-company in europe car outside eu", () => {
+
+      const result = calculator.getFinalCost(
+          {
+            value: 10000,
+            currency: "CHF",
+          },
+          {
+            isCompany: false,
+            isManufacturedOutsideEu: true,
+            isImportedFromEu: false,
+            vehicleType: "ELECTRIC_CAR",
+            engineOver20CCM: false,
+            extraCosts: [],
+            customDutyCountry: "CH",
+          },
+      );
+      const vat = result.costLines.find(c => c.key === "vat")
+
+      expect(vat?.cost.value).to.eq(891);
+
+
+    });
+
     it("should get correct value for non-company in europe with less then 2.0 engine excise", () => {
       // 10000
       // 1000 provision
@@ -659,7 +684,7 @@ describe("Calculator", () => {
       const expectedProvision = 1000;
       const expectedCustomsDuty = (auctionCost + expectedProvision) * 0.1;
 
-      expect(customsDuty.cost.value).eq(expectedCustomsDuty);
+      expect(customsDuty?.cost.value).eq(expectedCustomsDuty);
       expect(result.finalCost.value).to.eq(
         auctionCost + expectedCustomsDuty + expectedProvision,
       );

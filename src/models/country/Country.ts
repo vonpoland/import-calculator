@@ -1,1 +1,1 @@
-export type Country = "PL" | "NL" | "DE";
+export type Country = "PL" | "NL" | "DE" | "CH";
