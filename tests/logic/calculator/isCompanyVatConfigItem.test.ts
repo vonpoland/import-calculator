@@ -45,26 +45,26 @@ describe("Currency Conversion", () => {
     });
   });
 
-    it("should not get same output for not company vat CH", () => {
-        const configItem = new IsCompanyVatConfigItem();
-        const inputCostValue = 10;
+  it("should not get same output for not company vat CH", () => {
+    const configItem = new IsCompanyVatConfigItem();
+    const inputCostValue = 10;
 
-        expect(
-            configItem.result({
-                value: {
-                    country: "CH",
-                    isCompany: false,
-                },
-                cost: {
-                    value: inputCostValue,
-                    currency: "EUR",
-                },
-            }),
-        ).to.eql({
-            currency: "EUR",
-            value: inputCostValue * 0.081,
-        });
+    expect(
+      configItem.result({
+        value: {
+          country: "CH",
+          isCompany: false,
+        },
+        cost: {
+          value: inputCostValue,
+          currency: "EUR",
+        },
+      }),
+    ).to.eql({
+      currency: "EUR",
+      value: inputCostValue * 0.081,
     });
+  });
 
   it("should not get same output for not company vat PL", () => {
     const configItem = new IsCompanyVatConfigItem();
