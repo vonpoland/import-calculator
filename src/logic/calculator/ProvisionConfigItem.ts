@@ -18,6 +18,7 @@ export class ProvisionConfigItem implements ConfigItem {
   constructor(
     private readonly currencyRates: CurrencyRates,
     private readonly provisions: Array<ProvisionType>,
+    private readonly customProvision?: (quote: Cost) => Cost,
   ) {}
 
   key: ConfigItemKeys = "provision";
@@ -26,6 +27,10 @@ export class ProvisionConfigItem implements ConfigItem {
   dependencies: Array<ConfigItemKeys> = ["input"];
 
   result(input: ConfigItemValues<undefined>) {
+    if (this.customProvision) {
+      return this.customProvision(input.cost);
+    }
+
     const provisionConfig = this.provisions.find(
       (config) =>
         input.cost.value <=
