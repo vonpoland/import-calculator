@@ -447,6 +447,51 @@ describe("Calculator", () => {
       expect(response.finalCost.currency).to.eq("EUR");
       expect(response.finalCost.value).to.eq(16000);
     });
+
+    it("should get correct provision with custom function", () => {
+      calculator = BasicCalculator.create(
+        [
+          new ProvisionConfigItem(
+            {
+              EUR: 1,
+              CHF: 0.95,
+              PLN: 4.5,
+            },
+            [],
+            (cost) => {
+              return {
+                ...cost,
+                value: 500,
+              };
+            },
+          ),
+        ],
+        {
+          EUR: 1,
+          CHF: 0.94,
+          PLN: 4.5,
+        },
+      );
+
+      const response = calculator.getFinalCost(
+        {
+          value: 10000,
+          currency: "PLN",
+        },
+        {
+          isCompany: false,
+          vehicleType: "ELECTRIC_CAR",
+          engineOver20CCM: true,
+          isManufacturedOutsideEu: false,
+          isImportedFromEu: true,
+          extraCosts: [],
+          customDutyCountry: "DE",
+        },
+      );
+
+      expect(response.finalCost.currency).to.eq("PLN");
+      expect(response.finalCost.value).to.eq(10500);
+    });
   });
 
   describe("Calculator with provision and vat", () => {
